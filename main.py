@@ -6,7 +6,7 @@ import logging
 import os
 import json
 from datetime import date
-
+import streamlit as st
 
 load_dotenv()
 
@@ -65,6 +65,7 @@ def main():
         if user.strip() == '0': break
         answer = ask_question(user, client, faq_content, system_prompt)
         print(f"\n{answer}\n\n")
+        st.write(answer)
         
         if "К сожалению, в моей базе данных нет" in answer:
             save_unknown_questions(user)  # ← log it
