@@ -49,6 +49,9 @@ def save_unknown_questions(user):
         f.write(f'{today} - {user}\n')
 
 
+# for deployment
+def my_client():
+    client = genai.Client(api_key=os.getenv('GEMINI_API_KEY'))
 
 def main():
     # 1. Initialize Session State (The "Memory")
@@ -56,46 +59,49 @@ def main():
         st.session_state.messages = []
 
     logging.info("Initializing a client...")
-    client = genai.Client(api_key=os.getenv('GEMINI_API_KEY'))
 
-    logging.info("Updating data...")
-    faq_content, system_prompt = load_data()
-
-    st.title("🎓 AI-консультант по обучению в Китае")
-    st.caption("Актуальная информация о поступлении, грантах и документах")
-
-    if "messages" not in st.session_state:
-        st.session_state.messages = [{"role": "assistant", "content": "Привет! Я ваш консультант по Китаю. Чем могу помочь?"}]    
+    with my_client() as client:
+        client = my_client()
 
 
-    for message in st.session_state.messages:
-        with st.chat_message(message["role"]):
-            st.markdown(message["content"])
-
-    with st.form(key='sample_form', clear_on_submit=True):
-        user_query = st.text_input("Ваш вопрос", key='user_question')
-        submit_button = st.form_submit_button(label="Спросить")
-
-    if submit_button:
-        if not user_query:
-            st.warning("Пожалуйста, введите вопрос!")
-        else:
-            st.session_state.messages.append({"role": "user", "content": user_query})
-            with st.chat_message("user"):
-                st.markdown(user_query)
-
-            with st.spinner('Думаю над ответом...'):
-                answer = ask_question(user_query, client, faq_content, system_prompt)
-                
-                st.session_state.messages.append({"role": "assistant", "content": answer})
-                with st.chat_message("assistant"):
-                    st.markdown(answer)
-
-                if "К сожалению, в моей базе данных нет" in answer:
-                    save_unknown_questions(user_query)
-
-
-
+        logging.info("Updating data...")
+        faq_content, system_prompt = load_data()
+    
+        st.title("🎓 AI-консультант по обучению в Китае")
+        st.caption("Актуальная информация о поступлении, грантах и документах")
+    
+        if "messages" not in st.session_state:
+            st.session_state.messages = [{"role": "assistant", "content": "Привет! Я ваш консультант по Китаю. Чем могу помочь?"}]    
+    
+    
+        for message in st.session_state.messages:
+            with st.chat_message(message["role"]):
+                st.markdown(message["content"])
+    
+        with st.form(key='sample_form', clear_on_submit=True):
+            user_query = st.text_input("Ваш вопрос", key='user_question')
+            submit_button = st.form_submit_button(label="Спросить")
+    
+        if submit_button:
+            if not user_query:
+                st.warning("Пожалуйста, введите вопрос!")
+            else:
+                st.session_state.messages.append({"role": "user", "content": user_query})
+                with st.chat_message("user"):
+                    st.markdown(user_query)
+    
+                with st.spinner('Думаю над ответом...'):
+                    answer = ask_question(user_query, client, faq_content, system_prompt)
+                    
+                    st.session_state.messages.append({"role": "assistant", "content": answer})
+                    with st.chat_message("assistant"):
+                        st.markdown(answer)
+    
+                    if "К сожалению, в моей базе данных нет" in answer:
+                        save_unknown_questions(user_query)
+    
+    
+    
 
 
 if __name__ == '__main__':
