@@ -48,29 +48,51 @@ def save_unknown_questions(user):
     with open("unknown_data.txt", 'a') as f:
         f.write(f'{today} - {user}\n')
 
+
+
 def main():
+    # 1. Initialize Session State (The "Memory")
+    if "messages" not in st.session_state:
+        st.session_state.messages = []
 
     logging.info("Initializing a client...")
-    client = genai.Client(api_key=os.getenv('GOOGLE_API_KEY'))
+    client = genai.Client(api_key=os.getenv('GEMINI_API_KEY'))
 
     logging.info("Updating data...")
     faq_content, system_prompt = load_data()
 
-    logging.info("Starting an app...")
-    intro = ask_question('Представься кратко - кто ты и чем можешь помочь', client, faq_content, system_prompt)
-    print(f"{intro}\n\n")
+    st.title("🎓 AI-консультант по обучению в Китае")
+    st.caption("Актуальная информация о поступлении, грантах и документах")
 
-    while True:
-        user = input("Ваш вопрос (0 для выхода)\n> ")
-        if user.strip() == '0': break
-        answer = ask_question(user, client, faq_content, system_prompt)
-        print(f"\n{answer}\n\n")
-        st.write(answer)
-        
-        if "К сожалению, в моей базе данных нет" in answer:
-            save_unknown_questions(user)  # ← log it
+    if "messages" not in st.session_state:
+        st.session_state.messages = [{"role": "assistant", "content": "Привет! Я ваш консультант по Китаю. Чем могу помочь?"}]    
 
-    print("Bye!")
+
+    for message in st.session_state.messages:
+        with st.chat_message(message["role"]):
+            st.markdown(message["content"])
+
+    with st.form(key='sample_form', clear_on_submit=True):
+        user_query = st.text_input("Ваш вопрос", key='user_question')
+        submit_button = st.form_submit_button(label="Спросить")
+
+    if submit_button:
+        if not user_query:
+            st.warning("Пожалуйста, введите вопрос!")
+        else:
+            st.session_state.messages.append({"role": "user", "content": user_query})
+            with st.chat_message("user"):
+                st.markdown(user_query)
+
+            with st.spinner('Думаю над ответом...'):
+                answer = ask_question(user_query, client, faq_content, system_prompt)
+                
+                st.session_state.messages.append({"role": "assistant", "content": answer})
+                with st.chat_message("assistant"):
+                    st.markdown(answer)
+
+                if "К сожалению, в моей базе данных нет" in answer:
+                    save_unknown_questions(user_query)
 
 
 
