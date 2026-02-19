@@ -40,4 +40,6 @@ unknown_data.txt  — auto-generated log of unanswered questions
 
 - [x] Gemini API integration
 - [x] Streamlit chat UI
-- [ ] Deploy to Streamlit Cloud
+- [X] Deploy to Streamlit Cloud
+
+[Check it out!](https://assistant-scholarships-china.streamlit.app/)
