@@ -17,7 +17,7 @@ The bot loads a structured knowledge base (`faq.json`) and a system prompt (`pro
 
 2. Activate the virtual environment and install dependencies:
    ```bash
-   python -m venv myvenv
+   python -m venv venv
    source myvenv/bin/activate
    pip install google-genai python-dotenv streamlit
    ```
