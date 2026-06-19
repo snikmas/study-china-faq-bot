@@ -54,6 +54,25 @@ def test_repository_knowledge_has_exact_approved_bilingual_scope() -> None:
     assert all(record.question.en and record.question.ru for record in knowledge.faqs)
     assert all(record.answer.en and record.answer.ru for record in knowledge.faqs)
     assert "стипендии" in knowledge.faqs[0].answer.ru
+    scholarship = knowledge.faqs[0]
+    assert "CampusChina" in scholarship.answer.en
+    assert "university scholarships" in scholarship.answer.en
+    assert "full scholarship" in scholarship.answer.en
+
+
+def test_repository_knowledge_covers_broader_student_and_parent_concerns() -> None:
+    knowledge = load_knowledge(
+        FAQ_PATH,
+        SOURCES_PATH,
+        current_utc_date=date(2026, 6, 12),
+    )
+    by_id = {record.id: record for record in knowledge.faqs}
+
+    assert "CampusChina" in by_id["submission-location"].answer.en
+    assert "university's own application portal" in by_id["submission-location"].answer.en
+    assert "SIM card and bank card" in by_id["first-arrival-steps"].answer.en
+    assert "parents and students" in by_id["admission-scam-warnings"].answer.en
+    assert "cost of living" in by_id["admission-scam-warnings"].answer.en
 
 
 def test_every_reference_resolves_to_specific_https_source_metadata() -> None:

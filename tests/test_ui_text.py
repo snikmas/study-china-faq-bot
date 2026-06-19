@@ -10,6 +10,8 @@ def test_core_copy_exists_in_english_and_russian() -> None:
     assert "официальными источниками" in text("trust_disclaimer", "ru")
     assert text("submit", "en") == "Ask"
     assert text("submit", "ru") == "Спросить"
+    assert "CampusChina/CSC" in text("unsupported", "en")
+    assert "выбор университета/города" in text("unsupported", "ru")
 
 
 def test_formatting_and_language_fallback() -> None:

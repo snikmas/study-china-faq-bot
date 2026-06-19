@@ -4,12 +4,12 @@
       "id": "scholarship-categories",
       "topic": "Scholarship categories",
       "question": {
-        "en": "What kinds of scholarships can international students use to study in China?",
-        "ru": "Какие виды стипендий доступны иностранным студентам для учебы в Китае?"
+        "en": "How can I get a scholarship to study in China, and what scholarship types exist?",
+        "ru": "Как получить стипендию для учебы в Китае и какие виды стипендий бывают?"
       },
       "answer": {
-        "en": "The main groups are Chinese Government Scholarships, local-government scholarships, and scholarships offered by universities or schools. They have different eligible programs, coverage, and application channels, so compare the current official notice for each award.",
-        "ru": "Основные группы — стипендии Правительства Китая, стипендии местных органов власти и стипендии университетов или учебных заведений. У них разные программы, покрытие и каналы подачи, поэтому сравнивайте актуальные официальные объявления по каждой стипендии."
+        "en": "Start with the official scholarship route, then narrow it by level, language, country, and university. The main options are Chinese Government Scholarship/CSC programs, university scholarships, and some provincial or local scholarships. A full scholarship can cover tuition, accommodation or a housing subsidy, stipend, and medical insurance; a partial scholarship covers less. For a first search, use CampusChina/CSC for government scholarships and then check the target university's own international admissions or scholarship page.",
+        "ru": "Начните с официального маршрута стипендии, а затем сузьте поиск по уровню обучения, языку, стране и университету. Основные варианты — стипендии Правительства Китая/CSC, стипендии университетов и некоторые провинциальные или местные стипендии. Полная стипендия может покрывать обучение, общежитие или жилищную субсидию, стипендию на проживание и медстраховку; частичная покрывает меньше. Для первого поиска используйте CampusChina/CSC для государственных стипендий, а затем страницу international admissions или scholarships выбранного университета."
       },
       "source_ids": [
         "campus-china-cgs-guide"
@@ -22,12 +22,12 @@
       "id": "csc-application-routes",
       "topic": "CSC application routes",
       "question": {
-        "en": "What is the difference between CSC Type A and Type B?",
-        "ru": "В чем разница между CSC типа A и типа B?"
+        "en": "What is the difference between CSC Type A, Type B, and other scholarship routes?",
+        "ru": "В чем разница между CSC типа A, типа B и другими маршрутами стипендий?"
       },
       "answer": {
-        "en": "Type A normally uses a dispatching authority or another authorized body outside the university. Type B normally uses a designated Chinese university, which reviews and nominates candidates. The type identifies the application channel; it does not by itself guarantee identical coverage or admission.",
-        "ru": "Тип A обычно предполагает подачу через направляющий или другой уполномоченный орган вне университета. Тип B обычно предполагает подачу через назначенный китайский университет, который рассматривает и рекомендует кандидатов. Тип обозначает канал подачи и сам по себе не гарантирует одинаковое покрытие или зачисление."
+        "en": "Think of the type as the application channel. Type A/Bilateral routes usually go through an embassy, dispatching authority, or another authorized body before CSC review. Type B/University Program routes usually go through a designated Chinese university, and the university reviews or nominates candidates. Some designated programs are separate routes with their own rules. The type does not guarantee admission or the same coverage; always follow the current notice for that exact route.",
+        "ru": "Думайте о типе как о канале подачи. Тип A/Bilateral обычно идет через посольство, направляющий орган или другой уполномоченный орган до рассмотрения CSC. Тип B/University Program обычно идет через выбранный китайский университет, который рассматривает или рекомендует кандидатов. Некоторые designated programs являются отдельными маршрутами со своими правилами. Сам тип не гарантирует зачисление или одинаковое покрытие; всегда следуйте актуальному объявлению именно по вашему маршруту."
       },
       "source_ids": [
         "campus-china-cgs-guide",
@@ -98,12 +98,12 @@
       "id": "submission-location",
       "topic": "Where to submit",
       "question": {
-        "en": "Where should I submit a CSC application?",
-        "ru": "Куда подавать заявку на стипендию CSC?"
+        "en": "Where do I apply for Chinese scholarships: CampusChina, CSC, university, or embassy?",
+        "ru": "Куда подавать на стипендии в Китае: CampusChina, CSC, университет или посольство?"
       },
       "answer": {
-        "en": "For a Type A route, follow the authorized dispatching body's instructions and complete the CSC system steps it specifies. For a university Type B route, applicants commonly submit in the CSC system and in the university's own portal; Zhejiang University's 2026 guide explicitly requires both. Do not assume one portal completes every route.",
-        "ru": "Для маршрута типа A следуйте инструкции уполномоченного направляющего органа и выполните указанные им шаги в системе CSC. Для университетского маршрута типа B обычно требуется подача и в системе CSC, и на портале самого университета; руководство Чжэцзянского университета на 2026 год прямо требует оба шага. Не считайте, что одного портала достаточно для любого маршрута."
+        "en": "Use the official route named in the scholarship notice. CampusChina is the public CSC/Chinese Government Scholarship entry point. For Type A, the embassy or dispatching authority may tell you how to use the CSC system. For Type B, many universities require both the CSC system and the university's own application portal. Do not assume one website is enough; make a checklist with the CSC/CampusChina step, the university portal step, and any embassy or dispatching-authority step.",
+        "ru": "Используйте официальный маршрут, указанный в объявлении о стипендии. CampusChina — публичная точка входа CSC/Chinese Government Scholarship. Для типа A посольство или направляющий орган обычно объясняет, как использовать систему CSC. Для типа B многие университеты требуют и систему CSC, и собственный портал университета. Не считайте, что одного сайта достаточно; сделайте чеклист: шаг CSC/CampusChina, шаг портала университета и, если нужно, шаг посольства или направляющего органа."
       },
       "source_ids": [
         "campus-china-cgs-guide",
@@ -177,8 +177,8 @@
         "ru": "Что иностранному студенту нужно сделать сразу после приезда в Китай?"
       },
       "answer": {
-        "en": "Complete university check-in as instructed. Hotels register guests, but for non-hotel accommodation you or the host must complete accommodation registration with public security within 24 hours. X1 holders must also apply for a study residence permit within 30 days of entry. Ask the university international office for the local sequence and documents.",
-        "ru": "Пройдите регистрацию в университете по его инструкции. Гостиница регистрирует постояльца сама, но при проживании не в гостинице вы или принимающая сторона должны оформить регистрацию места проживания в органах общественной безопасности в течение 24 часов. Владельцу X1 также нужно подать на учебный вид на жительство в течение 30 дней после въезда. Уточните местную последовательность и документы в международном отделе университета."
+        "en": "After arrival, first follow the university's check-in instructions. Typical early steps are accommodation registration, health check if required, residence permit application for X1 students within 30 days, dormitory or housing confirmation, insurance confirmation, and practical setup such as SIM card and bank card. Ask the university international office for the local order, because cities and schools can handle the sequence differently.",
+        "ru": "После приезда сначала следуйте инструкции университета по регистрации. Обычно первые шаги — регистрация места проживания, медосмотр при необходимости, подача на вид на жительство для студентов с X1 в течение 30 дней, подтверждение общежития или жилья, проверка страховки и практические вещи вроде SIM-карты и банковской карты. Уточните порядок в международном отделе университета, потому что города и вузы могут организовывать это по-разному."
       },
       "source_ids": [
         "nia-accommodation-registration",
@@ -192,12 +192,12 @@
       "id": "admission-scam-warnings",
       "topic": "Admission and scholarship scam warnings",
       "question": {
-        "en": "How can I avoid fake admission or scholarship offers?",
-        "ru": "Как избежать поддельных предложений о зачислении или стипендии?"
+        "en": "What should students and parents worry about: safety, scams, costs, work, and choosing a city?",
+        "ru": "О чем стоит беспокоиться студентам и родителям: безопасность, мошенники, расходы, работа и выбор города?"
       },
       "answer": {
-        "en": "Use the official CSC, embassy, authority, and university domains, and verify any offer directly with the named institution. Treat guaranteed admission, guaranteed high scholarships, unofficial payment requests, and admission letters that cannot be confirmed by the university as warning signs. An agent's promise is not an official decision.",
-        "ru": "Используйте официальные сайты CSC, посольств, уполномоченных органов и университетов и проверяйте любое предложение напрямую в указанном вузе. Гарантии зачисления или высокой стипендии, неофициальные запросы оплаты и письма о зачислении, которые университет не подтверждает, — тревожные признаки. Обещание агента не является официальным решением."
+        "en": "For parents and students, the practical concerns are usually safety, total cost, language, scholarship reliability, whether work is allowed, and whether an agent is legitimate. Use official CSC, embassy, authority, and university domains, and verify any admission or scholarship offer directly with the named institution. Be careful with guaranteed admission, guaranteed high scholarships, unofficial payment requests, and letters that the university cannot confirm. For city choice, compare program fit, cost of living, climate, language support, dormitory options, and international student services.",
+        "ru": "Для родителей и студентов главные практические вопросы обычно такие: безопасность, общий бюджет, язык, надежность стипендии, можно ли работать и легитимен ли посредник. Используйте официальные сайты CSC, посольств, уполномоченных органов и университетов и проверяйте любое зачисление или стипендию напрямую в указанном вузе. Осторожно относитесь к гарантиям поступления, гарантиям высокой стипендии, неофициальным платежам и письмам, которые университет не подтверждает. При выборе города сравнивайте программу, стоимость жизни, климат, языковую поддержку, общежитие и сервисы для иностранных студентов."
       },
       "source_ids": [
         "hitsz-admission-fraud-warning"

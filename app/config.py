@@ -6,12 +6,18 @@ import os
 import re
 from collections.abc import Mapping
 from enum import Enum
+from pathlib import Path
 from typing import Any
 
 from pydantic import BaseModel, ConfigDict, SecretStr
+from dotenv import load_dotenv
 
 
 DEFAULT_GEMINI_MODEL = "gemini-2.5-flash"
+GEMINI_API_KEY_PLACEHOLDERS = frozenset({"your_gemini_api_key"})
+TELEGRAM_BOT_TOKEN_PLACEHOLDERS = frozenset({"your_telegram_bot_token"})
+TELEGRAM_OWNER_CHAT_ID_PLACEHOLDERS = frozenset({"123456789"})
+AGENCY_CONTACT_FALLBACK_PLACEHOLDERS = frozenset({"@your_agency_contact"})
 
 
 class AvailabilityCode(str, Enum):
@@ -63,6 +69,11 @@ def _load_streamlit_secrets() -> Mapping[str, Any]:
         return {}
 
 
+def _load_process_environment() -> Mapping[str, str]:
+    load_dotenv(dotenv_path=Path.cwd() / ".env", override=False)
+    return os.environ
+
+
 def _read_setting(
     key: str,
     secrets: Mapping[str, Any],
@@ -76,19 +87,36 @@ def _read_setting(
     return environ.get(key)
 
 
-def _clean_text(value: Any, *, max_length: int | None = None) -> str | None:
+def _is_placeholder(value: str, placeholders: frozenset[str]) -> bool:
+    return value.casefold() in placeholders
+
+
+def _clean_text(
+    value: Any,
+    *,
+    max_length: int | None = None,
+    placeholders: frozenset[str] = frozenset(),
+) -> str | None:
     if not isinstance(value, str):
         return None
     cleaned = value.strip()
     if not cleaned or (max_length is not None and len(cleaned) > max_length):
         return None
+    if _is_placeholder(cleaned, placeholders):
+        return None
     return cleaned
 
 
-def _parse_chat_id(value: Any) -> int | None:
+def _parse_chat_id(
+    value: Any,
+    *,
+    placeholders: frozenset[str] = frozenset(),
+) -> int | None:
     if not isinstance(value, str):
         return None
     cleaned = value.strip()
+    if _is_placeholder(cleaned, placeholders):
+        return None
     if not re.fullmatch(r"[+-]?\d+", cleaned):
         return None
     return int(cleaned)
@@ -102,7 +130,7 @@ def load_config(
     """Load settings without raising user-facing secret-bearing errors."""
 
     secret_values = _load_streamlit_secrets() if secrets is None else secrets
-    environment = os.environ if environ is None else environ
+    environment = _load_process_environment() if environ is None else environ
 
     raw_gemini_key = _read_setting(
         "GEMINI_API_KEY", secret_values, environment
@@ -120,13 +148,26 @@ def load_config(
         "AGENCY_CONTACT_FALLBACK", secret_values, environment
     )
 
-    gemini_key = _clean_text(raw_gemini_key)
+    gemini_key = _clean_text(
+        raw_gemini_key,
+        placeholders=GEMINI_API_KEY_PLACEHOLDERS,
+    )
     gemini_model = (
         _clean_text(raw_gemini_model, max_length=100) or DEFAULT_GEMINI_MODEL
     )
-    telegram_token = _clean_text(raw_telegram_token)
-    owner_chat_id = _parse_chat_id(raw_owner_chat_id)
-    fallback = _clean_text(raw_fallback, max_length=500)
+    telegram_token = _clean_text(
+        raw_telegram_token,
+        placeholders=TELEGRAM_BOT_TOKEN_PLACEHOLDERS,
+    )
+    owner_chat_id = _parse_chat_id(
+        raw_owner_chat_id,
+        placeholders=TELEGRAM_OWNER_CHAT_ID_PLACEHOLDERS,
+    )
+    fallback = _clean_text(
+        raw_fallback,
+        max_length=500,
+        placeholders=AGENCY_CONTACT_FALLBACK_PLACEHOLDERS,
+    )
 
     if gemini_key:
         chat = FeatureAvailability(

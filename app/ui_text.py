@@ -83,8 +83,18 @@ COPY: dict[str, dict[Language, str]] = {
         "ru": "Ответ может зависеть от страны, программы, даты или документов. Перед действиями подтвердите информацию в вузе или у консультанта.",
     },
     "unsupported": {
-        "en": "I do not have a supported stored answer for that question. No uncited answer will be generated.",
-        "ru": "Для этого вопроса нет поддержанного сохраненного ответа. Ответ без источников не будет создан.",
+        "en": (
+            "I do not have a supported stored answer for that exact question. "
+            "Try asking about scholarships, CampusChina/CSC routes, Type A/B, "
+            "documents, deadlines, X1/X2 visas, arrival steps, HSK, scams, "
+            "costs, safety, or choosing a university/city."
+        ),
+        "ru": (
+            "Для этого точного вопроса нет поддержанного сохраненного ответа. "
+            "Попробуйте спросить про стипендии, CampusChina/CSC, тип A/B, "
+            "документы, сроки, визы X1/X2, первые шаги после приезда, HSK, "
+            "мошенников, расходы, безопасность или выбор университета/города."
+        ),
     },
     "temporary_failure": {
         "en": "The assistant could not safely resolve this question right now. Please try again later.",
