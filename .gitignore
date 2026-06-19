@@ -1,2 +1,12 @@
 .env
-venv
+.env.*
+!.env.example
+venv/
+myvenv/
+__pycache__/
+.pytest_cache/
+.streamlit/secrets.toml
+unknown_data.txt
+*.log
+docs/
+.agent/

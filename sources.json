@@ -1,0 +1,108 @@
+{
+  "sources": [
+    {
+      "id": "campus-china-cgs-guide",
+      "organization": "China Scholarship Council - Campus China",
+      "page_title": "Application Guide for Chinese Government Scholarship",
+      "url": "https://campuschina.org/content/details3_74776.html",
+      "language": "en",
+      "accessed_on": "2026-06-12"
+    },
+    {
+      "id": "china-embassy-belgium-cgs-2026",
+      "organization": "Embassy of the People's Republic of China in Belgium",
+      "page_title": "Chinese Government Scholarship Application 2026/2027",
+      "url": "https://be.china-embassy.gov.cn/sghd/202511/P020251111863531034311.pdf",
+      "language": "en",
+      "accessed_on": "2026-06-12"
+    },
+    {
+      "id": "china-embassy-indonesia-cgs-2026",
+      "organization": "Embassy of the People's Republic of China in Indonesia",
+      "page_title": "2026/2027 Chinese Government Scholarship Application",
+      "url": "https://id.china-embassy.gov.cn/eng/sgdt/202510/t20251027_11741674.htm",
+      "language": "en",
+      "accessed_on": "2026-06-12"
+    },
+    {
+      "id": "tsinghua-cgs-2026",
+      "organization": "Tsinghua University Graduate Admissions",
+      "page_title": "2026 Chinese Government Scholarship",
+      "url": "https://yz.tsinghua.edu.cn/en/info/1027/1117.htm",
+      "language": "en",
+      "accessed_on": "2026-06-12"
+    },
+    {
+      "id": "zhejiang-cgs-type-b-2026",
+      "organization": "Zhejiang University International College",
+      "page_title": "Zhejiang University 2026 Chinese Government Scholarship Type B",
+      "url": "https://iczu.zju.edu.cn/admissionsen/2022/0530/c68996a2590724/page.htm",
+      "language": "en",
+      "accessed_on": "2026-06-12"
+    },
+    {
+      "id": "china-visa-x1-x2",
+      "organization": "Chinese Visa Application Service Center",
+      "page_title": "Visa Types: X1 Long-Term Study and X2 Short-Term Study",
+      "url": "https://www.visaforchina.cn/TSE3_EN/qianzhengyewu/jichuzhishi/banliliucheng",
+      "language": "en",
+      "accessed_on": "2026-06-12"
+    },
+    {
+      "id": "china-visa-x1-residence",
+      "organization": "Chinese Visa Application Service Center",
+      "page_title": "Updated Chinese Visa Requirements: X1 and X2 Study Visas",
+      "url": "https://www.visaforchina.cn/KTM3_EN/tongzhigonggao/228370422213775360.html",
+      "language": "en",
+      "accessed_on": "2026-06-12"
+    },
+    {
+      "id": "nia-accommodation-registration",
+      "organization": "National Immigration Administration of China",
+      "page_title": "Regulations on Filing Accommodation Registration for Foreigners",
+      "url": "https://en.nia.gov.cn/n147423/n147478/n147715/c158241/content.html",
+      "language": "en",
+      "accessed_on": "2026-06-12"
+    },
+    {
+      "id": "hitsz-admission-fraud-warning",
+      "organization": "Harbin Institute of Technology, Shenzhen",
+      "page_title": "Official Warning on Fraudulent International Admissions Activity",
+      "url": "https://en.hitsz.edu.cn/__local/C/3A/DE/CC45207172649D598021674780B_993E5866_F5637B.pdf",
+      "language": "multilingual",
+      "accessed_on": "2026-06-12"
+    },
+    {
+      "id": "chinese-test-hsk",
+      "organization": "Chinese Testing International",
+      "page_title": "About HSK: Three Stages, Nine Levels",
+      "url": "https://www.chinesetest.cn/hsk",
+      "language": "en",
+      "accessed_on": "2026-06-12"
+    },
+    {
+      "id": "chinese-test-hsk-advanced",
+      "organization": "Chinese Testing International",
+      "page_title": "HSK Levels 7-9",
+      "url": "https://www.chinesetest.cn/HSK/7-9",
+      "language": "en",
+      "accessed_on": "2026-06-12"
+    },
+    {
+      "id": "ined-russia-cgs-2026-webinar",
+      "organization": "Ministry of Science and Higher Education of the Russian Federation",
+      "page_title": "Webinar on the Chinese Government Scholarship Type A 2026/2027 Campaign",
+      "url": "https://files.ined.ru/adminpanel/12_1142_9f84f9de7976558f7c1a049308bc9ec7.pdf",
+      "language": "ru",
+      "accessed_on": "2026-06-12"
+    },
+    {
+      "id": "ined-academic-mobility-programs",
+      "organization": "Interobrazovanie",
+      "page_title": "Academic Mobility Programs and Current Application Documents",
+      "url": "https://mobility.ined.ru/academicmobility/programs",
+      "language": "ru",
+      "accessed_on": "2026-06-12"
+    }
+  ]
+}
