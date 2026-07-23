@@ -15,6 +15,35 @@ COPY: dict[str, dict[Language, str]] = {
         "en": "Study in China FAQ assistant",
         "ru": "FAQ-помощник по учебе в Китае",
     },
+    "product_badge": {
+        "en": "AI FAQ demo · trust-first answers",
+        "ru": "AI FAQ демо · ответы только из базы",
+    },
+    "hero_subtitle": {
+        "en": (
+            "Ask a question and get a reviewed FAQ answer with official source links. "
+            "If the topic is sensitive, the assistant recommends human confirmation."
+        ),
+        "ru": (
+            "Задайте вопрос и получите проверенный ответ FAQ со ссылками на "
+            "официальные источники. По чувствительным темам бот предложит "
+            "подтверждение у специалиста."
+        ),
+    },
+    "examples_title": {
+        "en": "Try an example",
+        "ru": "Примеры вопросов",
+    },
+    "show_sample_answer": {
+        "en": "Show sample answer",
+        "ru": "Показать пример ответа",
+    },
+    "sample_answer_hint": {
+        "en": "Portfolio preview — no API call",
+        "ru": "Превью для портфолио — без вызова API",
+    },
+    "answer_topic": {"en": "Topic", "ru": "Тема"},
+    "sources_title": {"en": "Official sources", "ru": "Официальные источники"},
     "language_label": {"en": "Language", "ru": "Язык"},
     "trust_disclaimer": {
         "en": (
@@ -30,19 +59,19 @@ COPY: dict[str, dict[Language, str]] = {
     },
     "question_label": {"en": "Your question", "ru": "Ваш вопрос"},
     "question_help": {
-        "en": "Maximum 500 characters.",
-        "ru": "Максимум 500 символов.",
+        "en": "Maximum 500 characters. Pick an example or type your own.",
+        "ru": "Максимум 500 символов. Выберите пример или введите свой вопрос.",
     },
-    "submit": {"en": "Ask", "ru": "Спросить"},
-    "session_status": {"en": "Session limits", "ru": "Лимиты сессии"},
+    "submit": {"en": "Get answer", "ru": "Получить ответ"},
+    "session_status": {"en": "Session", "ru": "Сессия"},
     "calls_remaining": {
-        "en": "Questions remaining: {remaining} of {limit}",
-        "ru": "Осталось вопросов: {remaining} из {limit}",
+        "en": "{remaining}/{limit} questions left",
+        "ru": "Вопросов осталось: {remaining}/{limit}",
     },
-    "cooldown_ready": {"en": "Cooldown: ready", "ru": "Пауза: можно спросить"},
+    "cooldown_ready": {"en": "Ready for next question", "ru": "Можно задать вопрос"},
     "cooldown_wait": {
-        "en": "Cooldown: wait {seconds:.1f}s",
-        "ru": "Пауза: подождите {seconds:.1f} с",
+        "en": "Wait {seconds:.0f}s before the next question",
+        "ru": "Подождите {seconds:.0f} с перед следующим вопросом",
     },
     "empty_question": {
         "en": "Enter a question before submitting.",
@@ -73,7 +102,7 @@ COPY: dict[str, dict[Language, str]] = {
         "ru": "Нет актуальных проверенных ответов FAQ. Чат отключен.",
     },
     "thinking": {"en": "Checking the stored FAQ...", "ru": "Проверяю сохраненный FAQ..."},
-    "answered": {"en": "Stored answer", "ru": "Сохраненный ответ"},
+    "answered": {"en": "Reviewed answer", "ru": "Проверенный ответ"},
     "needs_confirmation": {
         "en": "Human confirmation recommended",
         "ru": "Рекомендуется подтверждение специалистом",
@@ -105,10 +134,15 @@ COPY: dict[str, dict[Language, str]] = {
         "en": "{organization}, {page_title}, {url}, accessed {accessed_on}",
         "ru": "{organization}, {page_title}, {url}, дата доступа: {accessed_on}",
     },
-    "inquiry_title": {"en": "Request human follow-up", "ru": "Запросить связь со специалистом"},
+    "inquiry_title": {"en": "Talk to a specialist", "ru": "Связаться со специалистом"},
     "inquiry_unavailable": {
+        # Kept for tests/back-compat; UI no longer shows this debug string.
         "en": "Inquiry handoff is not configured, so the contact form is hidden.",
         "ru": "Передача заявки не настроена, поэтому форма контакта скрыта.",
+    },
+    "inquiry_optional_note": {
+        "en": "Need a human follow-up? This demo can hand off leads to Telegram when connected.",
+        "ru": "Нужен специалист? В полной версии заявка уходит в Telegram владельцу.",
     },
     "name": {"en": "Name", "ru": "Имя"},
     "contact": {"en": "Email or Telegram username", "ru": "Email или имя пользователя Telegram"},

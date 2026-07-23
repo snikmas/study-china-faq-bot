@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import time
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 
 import streamlit as st
@@ -11,8 +11,8 @@ from app.classifier import GeminiFAQClassifier
 from app.config import ConfigLoadResult, load_config
 from app.knowledge import KnowledgeLoadError, LoadedKnowledge, load_knowledge
 from app.lead import validate_inquiry
-from app.models import StudyLevel
-from app.service import AnswerResponse, AnswerStatus, resolve_answer
+from app.models import FAQRecord, StudyLevel
+from app.service import AnswerItem, AnswerResponse, AnswerStatus, Citation, resolve_answer
 from app.session import (
     CALL_LIMIT,
     QUESTION_LIMIT,
@@ -26,6 +26,13 @@ from app.session import (
 )
 from app.telegram import TelegramDeliveryState, send_inquiry_notification
 from app.ui_text import SUPPORTED_LANGUAGES, normalize_language, text
+
+SAMPLE_FAQ_IDS: tuple[str, ...] = (
+    "scholarship-categories",
+    "csc-application-routes",
+    "language-requirements",
+    "application-documents",
+)
 
 
 @dataclass(frozen=True, slots=True)
@@ -84,6 +91,71 @@ def cached_classifier(api_key: str, model: str) -> GeminiFAQClassifier:
     return GeminiFAQClassifier(GeminiGenerateContentAdapter(api_key), model=model)
 
 
+def inject_styles() -> None:
+    st.markdown(
+        """
+        <style>
+        .block-container {
+            padding-top: 1.4rem;
+            padding-bottom: 2rem;
+            max-width: 880px;
+        }
+        div[data-testid="stToolbar"] {visibility: hidden; height: 0; position: fixed;}
+        #MainMenu {visibility: hidden;}
+        footer {visibility: hidden;}
+        header {visibility: hidden;}
+        .faq-badge {
+            display: inline-block;
+            background: #E8F1FF;
+            color: #1F6FEB;
+            border: 1px solid #C9DEFF;
+            border-radius: 999px;
+            padding: 0.25rem 0.7rem;
+            font-size: 0.84rem;
+            font-weight: 600;
+            margin-bottom: 0.55rem;
+        }
+        .faq-card {
+            background: #FFFFFF;
+            border: 1px solid #D9E2EC;
+            border-radius: 16px;
+            padding: 1rem 1.1rem;
+            box-shadow: 0 8px 24px rgba(20, 33, 43, 0.04);
+            margin: 0.75rem 0 1rem 0;
+        }
+        .faq-card h4 {
+            margin: 0 0 0.55rem 0;
+            font-size: 1rem;
+            color: #14212B;
+        }
+        .faq-meta {
+            color: #627D98;
+            font-size: 0.88rem;
+            margin-bottom: 0.35rem;
+        }
+        .faq-answer {
+            color: #243B53;
+            line-height: 1.55;
+            margin: 0.4rem 0 0.7rem 0;
+        }
+        .faq-source a {
+            color: #1F6FEB;
+            text-decoration: none;
+        }
+        .faq-source {
+            font-size: 0.9rem;
+            margin: 0.15rem 0;
+        }
+        .stButton > button[kind="primary"] {
+            border-radius: 10px;
+            font-weight: 600;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
 def selected_language() -> str:
     labels = {"en": "English", "ru": "Русский"}
     current_language = normalize_language(st.session_state.get("language"))
@@ -97,37 +169,73 @@ def selected_language() -> str:
     return normalize_language(choice)
 
 
+def example_faqs(knowledge: LoadedKnowledge | None) -> list[FAQRecord]:
+    if knowledge is None:
+        return []
+    by_id = {faq.id: faq for faq in knowledge.faqs}
+    ordered = [by_id[faq_id] for faq_id in SAMPLE_FAQ_IDS if faq_id in by_id]
+    if ordered:
+        return ordered
+    return list(knowledge.faqs[:4])
+
+
+def sample_response_from_faq(faq: FAQRecord, knowledge: LoadedKnowledge) -> AnswerResponse:
+    sources = knowledge.sources_for(faq)
+    citations = tuple(
+        Citation(
+            source_id=source.id,
+            organization=source.organization,
+            page_title=source.page_title,
+            url=str(source.url),
+            language=source.language.value,
+            accessed_on=source.accessed_on.isoformat(),
+        )
+        for source in sources
+    )
+    item = AnswerItem(
+        faq_id=faq.id,
+        topic=faq.topic,
+        answer_en=faq.answer.en,
+        answer_ru=faq.answer.ru,
+        risk=faq.risk.value,
+        citations=citations,
+    )
+    if faq.risk.value == "human_confirmation_required":
+        status = AnswerStatus.NEEDS_CONFIRMATION
+    else:
+        status = AnswerStatus.ANSWERED
+    return AnswerResponse(status=status, items=(item,), reason="portfolio_sample")
+
+
 def render_session_limits(language: str) -> None:
     remaining = calls_remaining(st.session_state)
     wait = cooldown_remaining(st.session_state, time.monotonic())
-    st.caption(text("session_status", language))
-    st.caption(text("calls_remaining", language, remaining=remaining, limit=CALL_LIMIT))
+    left, right = st.columns(2)
+    left.caption(text("calls_remaining", language, remaining=remaining, limit=CALL_LIMIT))
     if wait > 0:
-        st.caption(text("cooldown_wait", language, seconds=wait))
+        right.caption(text("cooldown_wait", language, seconds=wait))
     else:
-        st.caption(text("cooldown_ready", language))
+        right.caption(text("cooldown_ready", language))
 
 
-def render_citations(item: object, language: str) -> None:
-    citations = getattr(item, "citations")
-    if not citations:
-        return
-    st.markdown(f"**{text('citations', language)}**")
-    for citation in citations:
-        st.markdown(
-            "- "
-            + text(
-                "citation_line",
-                language,
-                organization=citation.organization,
-                page_title=citation.page_title,
-                url=citation.url,
-                accessed_on=citation.accessed_on,
-            )
-        )
+def render_item_card(item: AnswerItem, language: str) -> None:
+    answer = item.answer_ru if language == "ru" else item.answer_en
+    with st.container(border=True):
+        st.markdown(f"**{text('answer_topic', language)}:** {item.topic}")
+        st.write(answer)
+        if item.citations:
+            st.markdown(f"**{text('sources_title', language)}**")
+            for citation in item.citations:
+                st.markdown(
+                    f"- [{citation.organization} — {citation.page_title}]({citation.url}) "
+                    f"({citation.accessed_on})"
+                )
 
 
-def render_answer(response: AnswerResponse, language: str) -> None:
+def render_answer(response: AnswerResponse, language: str, *, sample: bool = False) -> None:
+    if sample:
+        st.caption(text("sample_answer_hint", language))
+
     if response.status is AnswerStatus.ANSWERED:
         st.success(text("answered", language))
     elif response.status is AnswerStatus.NEEDS_CONFIRMATION:
@@ -141,9 +249,7 @@ def render_answer(response: AnswerResponse, language: str) -> None:
         return
 
     for item in response.items:
-        answer = item.answer_ru if language == "ru" else item.answer_en
-        st.markdown(answer)
-        render_citations(item, language)
+        render_item_card(item, language)
 
 
 def answer_question(
@@ -163,6 +269,28 @@ def answer_question(
     return resolve_answer(classifier_result, knowledge)
 
 
+def set_example_question(question: str) -> None:
+    st.session_state["question_text"] = question
+
+
+def render_examples(language: str, faqs: Sequence[FAQRecord]) -> None:
+    if not faqs:
+        return
+    st.markdown(f"**{text('examples_title', language)}**")
+    cols = st.columns(2)
+    for index, faq in enumerate(faqs):
+        question = faq.question.ru if language == "ru" else faq.question.en
+        label = question if len(question) <= 70 else question[:67] + "..."
+        with cols[index % 2]:
+            st.button(
+                label,
+                key=f"example_{faq.id}_{language}",
+                use_container_width=True,
+                on_click=set_example_question,
+                args=(question,),
+            )
+
+
 def render_question_flow(
     *,
     language: str,
@@ -178,6 +306,23 @@ def render_question_flow(
     elif knowledge_state.error == "empty":
         st.warning(text("knowledge_empty", language))
 
+    examples = example_faqs(knowledge_state.knowledge)
+    render_examples(language, examples)
+
+    if knowledge_state.available and knowledge_state.knowledge is not None and examples:
+        if st.button(text("show_sample_answer", language), type="secondary"):
+            sample_faq = examples[0]
+            sample_question = (
+                sample_faq.question.ru if language == "ru" else sample_faq.question.en
+            )
+            sample_response = sample_response_from_faq(sample_faq, knowledge_state.knowledge)
+            st.session_state["preview_answer"] = {
+                "question": sample_question,
+                "response": sample_response,
+                "language": language,
+                "sample": True,
+            }
+
     chat_ready = config.chat_available and knowledge_state.available
     with st.form("question_form", clear_on_submit=False):
         question = st.text_area(
@@ -185,12 +330,23 @@ def render_question_flow(
             max_chars=QUESTION_LIMIT,
             help=text("question_help", language),
             key="question_text",
+            height=110,
         )
-        submitted = st.form_submit_button(text("submit", language), disabled=not chat_ready)
+        submitted = st.form_submit_button(
+            text("submit", language),
+            disabled=not chat_ready,
+            type="primary",
+        )
+
+    if st.session_state.get("preview_answer") and not submitted:
+        preview = st.session_state["preview_answer"]
+        st.markdown(f"**Q:** {preview['question']}")
+        render_answer(preview["response"], language, sample=True)
 
     if not submitted:
         return False
 
+    st.session_state.pop("preview_answer", None)
     cleaned = clean_question(question)
     error = question_error(cleaned)
     if error == "empty":
@@ -220,8 +376,9 @@ def render_question_flow(
         )
 
     st.session_state["answers"].append(
-        {"question": cleaned, "response": response, "language": language}
+        {"question": cleaned, "response": response, "language": language, "sample": False}
     )
+    st.markdown(f"**Q:** {cleaned}")
     render_answer(response, language)
     return True
 
@@ -233,7 +390,7 @@ def render_answer_history(language: str, *, skip_latest: bool) -> None:
         question = entry["question"]
         response = entry["response"]
         with st.expander(question):
-            render_answer(response, language)
+            render_answer(response, language, sample=bool(entry.get("sample")))
 
 
 def level_options(language: str) -> Mapping[str, str]:
@@ -247,11 +404,14 @@ def level_options(language: str) -> Mapping[str, str]:
 
 
 def render_inquiry_flow(language: str, config: ConfigLoadResult) -> None:
+    # Hide unfinished/debug empty handoff from portfolio screenshots.
+    if not config.telegram_available:
+        st.divider()
+        st.caption(text("inquiry_optional_note", language))
+        return
+
     st.divider()
     st.subheader(text("inquiry_title", language))
-    if not config.telegram_available:
-        st.caption(text("inquiry_unavailable", language))
-        return
 
     if st.session_state.get("inquiry_sent") is True:
         st.success(text("already_sent", language))
@@ -278,7 +438,7 @@ def render_inquiry_flow(language: str, config: ConfigLoadResult) -> None:
             max_chars=QUESTION_LIMIT,
         )
         consent = st.checkbox(text("consent", language))
-        submitted = st.form_submit_button(text("send_inquiry", language))
+        submitted = st.form_submit_button(text("send_inquiry", language), type="primary")
 
     if not submitted:
         return
@@ -304,7 +464,6 @@ def render_inquiry_flow(language: str, config: ConfigLoadResult) -> None:
     owner_chat_id = config.settings.telegram_owner_chat_id
     fallback = config.settings.agency_contact_fallback
     if token is None or owner_chat_id is None or fallback is None:
-        st.caption(text("inquiry_unavailable", language))
         return
 
     result = send_inquiry_notification(
@@ -324,14 +483,25 @@ def render_inquiry_flow(language: str, config: ConfigLoadResult) -> None:
 
 
 def main() -> None:
-    st.set_page_config(page_title="Study in China FAQ", page_icon="CN")
+    st.set_page_config(
+        page_title="Study in China FAQ",
+        page_icon="📘",
+        layout="centered",
+        initial_sidebar_state="expanded",
+    )
+    inject_styles()
     initialize_session(st.session_state)
 
     config = cached_config()
     knowledge_state = cached_knowledge()
     language = selected_language()
 
+    st.markdown(
+        f"<div class='faq-badge'>{text('product_badge', language)}</div>",
+        unsafe_allow_html=True,
+    )
     st.title(text("app_title", language))
+    st.markdown(text("hero_subtitle", language))
     st.info(text("trust_disclaimer", language))
 
     rendered_current_answer = render_question_flow(
