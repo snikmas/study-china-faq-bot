@@ -3,6 +3,9 @@
 Trust-first bilingual FAQ assistant for study-abroad agencies. Built with
 Streamlit, Google Gemini, Telegram, and Pydantic.
 
+**Good reference for freelance / hiring:** AI FAQ bot that reduces hallucinations
+by answering only from reviewed knowledge, with citations and human handoff.
+
 This repository is a portfolio case study, not a claim of production deployment
 or real client usage. It demonstrates a safer FAQ pattern: Gemini classifies the
 visitor's question, but the final factual answer comes only from reviewed stored
